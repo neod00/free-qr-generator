@@ -1,0 +1,5 @@
+# Google AdSense
+google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0
+
+# Add your actual AdSense publisher ID here
+# Replace pub-0000000000000000 with your actual publisher ID

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💝 커플 기념일 선물 추천기 - AI가 추천하는 특별한 선물</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#fef2f2',
+                            100: '#fee2e2',
+                            200: '#fecaca',
+                            300: '#fca5a5',
+                            400: '#f87171',
+                            500: '#ef4444',
+                            600: '#dc2626',
+                            700: '#b91c1c',
+                            800: '#991b1b',
+                            900: '#7f1d1d',
+                        },
+                        secondary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .btn-primary {
+            @apply bg-primary-500 hover:bg-primary-600 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl;
+        }
+        
+        .btn-secondary {
+            @apply bg-secondary-500 hover:bg-secondary-600 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl;
+        }
+        
+        .input-field {
+            @apply w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200;
+        }
+        
+        .card {
+            @apply bg-white rounded-lg shadow-lg p-6 border border-gray-200;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50 font-sans">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <header class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-gray-800 mb-4">
+                💝 커플 기념일 선물 추천기
+            </h1>
+            <p class="text-xl text-gray-600">
+                AI가 추천하는 특별한 기념일 선물을 찾아보세요
+            </p>
+        </header>
+
+        <!-- Main Content -->
+        <div class="max-w-4xl mx-auto">
+            <div class="card max-w-2xl mx-auto">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">
+                    선물 받을 분의 정보를 입력해주세요
+                </h2>
+                
+                <form class="space-y-6">
+                    <!-- 성별 -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            성별
+                        </label>
+                        <div class="flex gap-4">
+                            <label class="flex items-center">
+                                <input type="radio" name="gender" value="female" checked class="mr-2">
+                                여성
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="gender" value="male" class="mr-2">
+                                남성
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- 나이 -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            나이
+                        </label>
+                        <input type="number" value="25" min="10" max="100" class="input-field" required>
+                    </div>
+
+                    <!-- 성격/취향 -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            성격/취향 (MBTI 또는 간단한 키워드)
+                        </label>
+                        <input 
+                            type="text" 
+                            placeholder="예: ENFP, 활발한, 조용한, 패션에 관심이 많은..." 
+                            class="input-field" 
+                            required
+                        >
+                    </div>
+
+                    <!-- 기념일 종류 -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            기념일 종류
+                        </label>
+                        <select class="input-field" required>
+                            <option value="">선택해주세요</option>
+                            <option value="생일">생일</option>
+                            <option value="사귄지 100일">사귄지 100일</option>
+                            <option value="사귄지 1년">사귄지 1년</option>
+                            <option value="밸런타인데이">밸런타인데이</option>
+                            <option value="화이트데이">화이트데이</option>
+                            <option value="크리스마스">크리스마스</option>
+                            <option value="기타">기타</option>
+                        </select>
+                    </div>
+
+                    <!-- 예산 범위 -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            예산 범위
+                        </label>
+                        <div class="flex gap-4 items-center">
+                            <input 
+                                type="number" 
+                                value="30000" 
+                                min="10000" 
+                                step="10000" 
+                                class="input-field" 
+                                required
+                            >
+                            <span class="text-gray-500">원 ~ </span>
+                            <input 
+                                type="number" 
+                                value="100000" 
+                                min="10000" 
+                                step="10000" 
+                                class="input-field" 
+                                required
+                            >
+                            <span class="text-gray-500">원</span>
+                        </div>
+                    </div>
+
+                    <!-- 카테고리 -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            선호 카테고리 (선택사항)
+                        </label>
+                        <select class="input-field">
+                            <option value="">전체</option>
+                            <option value="패션">패션</option>
+                            <option value="뷰티">뷰티</option>
+                            <option value="향수">향수</option>
+                            <option value="IT기기">IT기기</option>
+                            <option value="액세서리">액세서리</option>
+                            <option value="음식">음식</option>
+                            <option value="기타">기타</option>
+                        </select>
+                    </div>
+
+                    <!-- 추가 정보 -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            추가 정보 (선택사항)
+                        </label>
+                        <textarea 
+                            placeholder="특별히 좋아하는 것이나 싫어하는 것이 있다면 알려주세요..."
+                            rows="3"
+                            class="input-field"
+                        ></textarea>
+                    </div>
+
+                    <button 
+                        type="button" 
+                        class="w-full bg-primary-500 hover:bg-primary-600 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl"
+                        onclick="showRecommendations()"
+                    >
+                        🎁 선물 추천받기
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <footer class="text-center mt-16 text-gray-500">
+            <p>© 2024 커플 기념일 선물 추천기. AI 기반 맞춤형 선물 추천 서비스</p>
+            <p class="mt-2 text-sm">
+                쿠팡 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있습니다.
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        function showRecommendations() {
+            alert('실제 서비스에서는 여기서 GPT API를 호출하여 맞춤형 선물을 추천해드립니다! 🎁\n\n개발 서버를 실행하시면 완전한 기능을 체험하실 수 있습니다.');
+        }
+    </script>
+</body>
+</html> 

@@ -1,0 +1,42 @@
+{
+  "name": "couplegift",
+  "version": "1.0.0",
+  "description": "커플 기념일 선물 추천기 - GPT 기반 맞춤형 선물 추천 서비스",
+  "main": "index.js",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "keywords": ["react", "typescript", "gift", "ai", "recommendation"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "5.0.1",
+    "typescript": "^4.9.5",
+    "web-vitals": "^2.1.4"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.15",
+    "@types/react-dom": "^18.2.7",
+    "@types/node": "^20.4.5",
+    "tailwindcss": "^3.3.3",
+    "autoprefixer": "^10.4.14",
+    "postcss": "^8.4.27"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+} 
