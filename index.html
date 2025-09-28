@@ -694,8 +694,13 @@
         window.addEventListener('load', function() {
             console.log('윈도우 로드 완료');
         });
+        
+        // 오류 처리
+        window.addEventListener('error', function(e) {
+            console.error('JavaScript 오류:', e.error);
+        });
     </script>
-    <script src="js/qr-generator.js"></script>
-    <script src="js/main.js"></script>
+    <script src="js/qr-generator.js" onerror="console.error('qr-generator.js 로딩 실패')"></script>
+    <script src="js/main.js" onerror="console.error('main.js 로딩 실패')"></script>
 </body>
 </html>
