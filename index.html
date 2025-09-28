@@ -40,17 +40,38 @@
     
     <!-- QR Code Library -->
     <script>
-        // style 변수 충돌 방지
+        // style 변수 충돌 방지를 위한 완전한 격리
         (function() {
+            // 기존 style 변수 백업
             var originalStyle = window.style;
+            
+            // QR코드 라이브러리 로딩
             var script = document.createElement('script');
             script.src = 'https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js';
             script.onload = function() {
-                window.style = originalStyle;
+                // style 변수 복원
+                if (originalStyle !== undefined) {
+                    window.style = originalStyle;
+                } else {
+                    delete window.style;
+                }
                 console.log('QRCode library loaded successfully');
+                
+                // QRCode 객체가 제대로 로드되었는지 확인
+                if (typeof QRCode !== 'undefined') {
+                    console.log('QRCode object is available');
+                } else {
+                    console.error('QRCode object is not available');
+                }
             };
             script.onerror = function() {
                 console.error('QRCode library failed to load');
+                // 실패 시에도 style 변수 복원
+                if (originalStyle !== undefined) {
+                    window.style = originalStyle;
+                } else {
+                    delete window.style;
+                }
             };
             document.head.appendChild(script);
         })();

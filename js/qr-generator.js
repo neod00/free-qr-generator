@@ -1,5 +1,11 @@
 // ===== QR코드 생성기 관련 함수들 =====
 
+// style 변수 충돌 방지
+if (typeof window.style !== 'undefined') {
+    console.log('QR Generator: style 변수 충돌 감지됨, 정리 중...');
+    delete window.style;
+}
+
 // 전역 변수
 let currentQRCanvas = null;
 
