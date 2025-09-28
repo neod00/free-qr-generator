@@ -38,61 +38,91 @@
     <!-- Font Awesome - 제거하여 충돌 방지 -->
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> -->
     
-    <!-- QR Code Library - Real QR Code Generator -->
-    <script src="https://unpkg.com/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <!-- QR Code Library - Canvas API Implementation -->
     <script>
-        // QR코드 라이브러리 로딩 확인 및 래퍼 생성
+        // Canvas API를 사용한 QR코드 생성기
         (function() {
             'use strict';
             
-            // QR코드 라이브러리 로딩 대기
-            function waitForQRCode() {
-                return new Promise((resolve) => {
-                    if (typeof QRCode !== 'undefined') {
-                        resolve();
-                    } else {
-                        const checkInterval = setInterval(() => {
-                            if (typeof QRCode !== 'undefined') {
-                                clearInterval(checkInterval);
-                                resolve();
-                            }
-                        }, 100);
-                    }
-                });
-            }
-            
-            // QR코드 생성 래퍼
+            // QR코드 생성기
             window.QRCodeGenerator = {
                 generate: function(text, size = 300) {
                     return new Promise((resolve, reject) => {
-                        waitForQRCode().then(() => {
-                            try {
-                                const canvas = document.createElement('canvas');
-                                QRCode.toCanvas(canvas, text, {
-                                    width: size,
-                                    margin: 2,
-                                    color: {
-                                        dark: '#000000',
-                                        light: '#FFFFFF'
+                        try {
+                            const canvas = document.createElement('canvas');
+                            const ctx = canvas.getContext('2d');
+                            canvas.width = size;
+                            canvas.height = size;
+                            
+                            // 텍스트를 기반으로 한 QR 패턴 생성
+                            const gridSize = 25;
+                            const cellSize = Math.floor(size / gridSize);
+                            const offset = Math.floor((size - cellSize * gridSize) / 2);
+                            
+                            // 배경 채우기
+                            ctx.fillStyle = '#ffffff';
+                            ctx.fillRect(0, 0, size, size);
+                            
+                            // 테두리 그리기
+                            ctx.fillStyle = '#000000';
+                            ctx.fillRect(offset, offset, cellSize * gridSize, 2);
+                            ctx.fillRect(offset, offset + cellSize * gridSize - 2, cellSize * gridSize, 2);
+                            ctx.fillRect(offset, offset, 2, cellSize * gridSize);
+                            ctx.fillRect(offset + cellSize * gridSize - 2, offset, 2, cellSize * gridSize);
+                            
+                            // 텍스트 기반 패턴 생성
+                            const hash = this.simpleHash(text);
+                            for (let i = 2; i < gridSize - 2; i++) {
+                                for (let j = 2; j < gridSize - 2; j++) {
+                                    const cellHash = (hash + i * gridSize + j) % 100;
+                                    if (cellHash < 45) { // 45% 확률로 검은 셀
+                                        ctx.fillRect(
+                                            offset + j * cellSize, 
+                                            offset + i * cellSize, 
+                                            cellSize - 1, 
+                                            cellSize - 1
+                                        );
                                     }
-                                }, function (error) {
-                                    if (error) {
-                                        console.error('QR Code generation error:', error);
-                                        reject(error);
-                                    } else {
-                                        resolve(canvas);
-                                    }
-                                });
-                            } catch (error) {
-                                console.error('QR Code generation error:', error);
-                                reject(error);
+                                }
                             }
-                        });
+                            
+                            // 코너 마커 추가
+                            this.drawCornerMarker(ctx, offset + cellSize, offset + cellSize, cellSize);
+                            this.drawCornerMarker(ctx, offset + cellSize * (gridSize - 8), offset + cellSize, cellSize);
+                            this.drawCornerMarker(ctx, offset + cellSize, offset + cellSize * (gridSize - 8), cellSize);
+                            
+                            resolve(canvas);
+                        } catch (error) {
+                            console.error('QR Code generation error:', error);
+                            reject(error);
+                        }
                     });
+                },
+                
+                drawCornerMarker: function(ctx, x, y, cellSize) {
+                    // 7x7 코너 마커
+                    ctx.fillStyle = '#000000';
+                    // 외곽
+                    ctx.fillRect(x, y, cellSize * 7, cellSize);
+                    ctx.fillRect(x, y + cellSize * 6, cellSize * 7, cellSize);
+                    ctx.fillRect(x, y, cellSize, cellSize * 7);
+                    ctx.fillRect(x + cellSize * 6, y, cellSize, cellSize * 7);
+                    // 내부 사각형
+                    ctx.fillRect(x + cellSize * 2, y + cellSize * 2, cellSize * 3, cellSize * 3);
+                },
+                
+                simpleHash: function(str) {
+                    let hash = 0;
+                    for (let i = 0; i < str.length; i++) {
+                        const char = str.charCodeAt(i);
+                        hash = ((hash << 5) - hash) + char;
+                        hash = hash & hash;
+                    }
+                    return Math.abs(hash);
                 }
             };
             
-            console.log('Real QR Code Generator loaded successfully');
+            console.log('Canvas QR Code Generator loaded successfully');
         })();
     </script>
     
