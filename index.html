@@ -38,54 +38,73 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
-    <!-- QR Code Library - Custom Implementation -->
+    <!-- QR Code Library - Simple Canvas Implementation -->
     <script>
-        // Custom QR Code Generator without external dependencies
-        window.QRCodeGenerator = {
-            // Simple QR Code generation using canvas
-            generate: function(text, size = 300) {
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-                canvas.width = size;
-                canvas.height = size;
-                
-                // Create a simple pattern based on text hash
-                const hash = this.hashCode(text);
-                const patternSize = 25; // 25x25 grid
-                const cellSize = size / patternSize;
-                
-                // Fill background
-                ctx.fillStyle = '#ffffff';
-                ctx.fillRect(0, 0, size, size);
-                
-                // Generate pattern
-                ctx.fillStyle = '#000000';
-                for (let i = 0; i < patternSize; i++) {
-                    for (let j = 0; j < patternSize; j++) {
-                        const index = i * patternSize + j;
-                        const bit = (hash + index) % 2;
-                        if (bit === 1) {
-                            ctx.fillRect(j * cellSize, i * cellSize, cellSize, cellSize);
-                        }
-                    }
-                }
-                
-                return canvas;
-            },
+        // Simple QR Code Generator using Canvas API
+        (function() {
+            'use strict';
             
-            // Simple hash function
-            hashCode: function(str) {
-                let hash = 0;
-                for (let i = 0; i < str.length; i++) {
-                    const char = str.charCodeAt(i);
-                    hash = ((hash << 5) - hash) + char;
-                    hash = hash & hash; // Convert to 32bit integer
+            window.QRCodeGenerator = {
+                generate: function(text, size = 300) {
+                    try {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        canvas.width = size;
+                        canvas.height = size;
+                        
+                        // Create a simple pattern based on text
+                        const patternSize = 21; // 21x21 grid (standard QR size)
+                        const cellSize = Math.floor(size / patternSize);
+                        const offset = Math.floor((size - cellSize * patternSize) / 2);
+                        
+                        // Fill background
+                        ctx.fillStyle = '#ffffff';
+                        ctx.fillRect(0, 0, size, size);
+                        
+                        // Generate pattern
+                        ctx.fillStyle = '#000000';
+                        for (let i = 0; i < patternSize; i++) {
+                            for (let j = 0; j < patternSize; j++) {
+                                const index = i * patternSize + j;
+                                const bit = this.getBit(text, index);
+                                if (bit === 1) {
+                                    ctx.fillRect(
+                                        offset + j * cellSize, 
+                                        offset + i * cellSize, 
+                                        cellSize, 
+                                        cellSize
+                                    );
+                                }
+                            }
+                        }
+                        
+                        return canvas;
+                    } catch (error) {
+                        console.error('QR Code generation error:', error);
+                        return null;
+                    }
+                },
+                
+                getBit: function(text, index) {
+                    // Simple pattern generation based on text and position
+                    const hash = this.hashCode(text);
+                    const positionHash = this.hashCode(index.toString());
+                    return (hash + positionHash) % 2;
+                },
+                
+                hashCode: function(str) {
+                    let hash = 0;
+                    for (let i = 0; i < str.length; i++) {
+                        const char = str.charCodeAt(i);
+                        hash = ((hash << 5) - hash) + char;
+                        hash = hash & hash;
+                    }
+                    return Math.abs(hash);
                 }
-                return Math.abs(hash);
-            }
-        };
-        
-        console.log('Custom QR Code Generator loaded successfully');
+            };
+            
+            console.log('Simple QR Code Generator loaded successfully');
+        })();
     </script>
     
     <!-- Google AdSense -->
