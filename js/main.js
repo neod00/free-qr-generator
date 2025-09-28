@@ -14,6 +14,9 @@ function initializeApp() {
     // 사이드바 링크 이벤트 리스너 추가
     addSidebarEventListeners();
     
+    // QR코드 생성 버튼 이벤트 리스너 추가
+    addQRButtonEventListeners();
+    
     // 반응형 광고 크기 조정
     adjustAdSizes();
     
@@ -105,6 +108,25 @@ function addSidebarEventListeners() {
             }
         });
     });
+}
+
+// ===== QR코드 생성 버튼 이벤트 리스너 추가 =====
+function addQRButtonEventListeners() {
+    // 텍스트 QR코드 생성 버튼
+    const textBtn = document.getElementById('generate-text-btn');
+    if (textBtn) {
+        textBtn.addEventListener('click', function() {
+            if (typeof generateTextQR === 'function') {
+                generateTextQR();
+            } else {
+                console.error('generateTextQR function not found');
+                showError('QR코드 생성 기능을 로드하는 중입니다. 잠시 후 다시 시도해주세요.');
+            }
+        });
+    }
+    
+    // 다른 QR코드 생성 버튼들도 추가할 수 있습니다
+    // URL, Wi-Fi, 연락처 등...
 }
 
 // ===== 결과 영역 초기화 =====
