@@ -39,7 +39,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <!-- QR Code Library -->
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <script src="https://unpkg.com/qrcode@1.5.3/build/qrcode.min.js"></script>
     
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0000000000000000" crossorigin="anonymous"></script>
@@ -288,7 +288,7 @@
                             </select>
                         </div>
                         
-                        <button onclick="generateURLQR()" class="btn-primary">QR코드 생성</button>
+                        <button id="generate-url-btn" class="btn-primary">QR코드 생성</button>
                     </div>
                     
                     <div class="qr-result" id="qr-result-url">
@@ -330,7 +330,7 @@
                             </label>
                         </div>
                         
-                        <button onclick="generateWiFiQR()" class="btn-primary">QR코드 생성</button>
+                        <button id="generate-wifi-btn" class="btn-primary">QR코드 생성</button>
                     </div>
                     
                     <div class="qr-result" id="qr-result-wifi">
@@ -367,7 +367,7 @@
                             <input type="text" id="contact-org" placeholder="회사명">
                         </div>
                         
-                        <button onclick="generateContactQR()" class="btn-primary">QR코드 생성</button>
+                        <button id="generate-contact-btn" class="btn-primary">QR코드 생성</button>
                     </div>
                     
                     <div class="qr-result" id="qr-result-contact">
@@ -399,7 +399,7 @@
                             <textarea id="email-body" placeholder="이메일 내용" rows="3"></textarea>
                         </div>
                         
-                        <button onclick="generateEmailQR()" class="btn-primary">QR코드 생성</button>
+                        <button id="generate-email-btn" class="btn-primary">QR코드 생성</button>
                     </div>
                     
                     <div class="qr-result" id="qr-result-email">
@@ -426,7 +426,7 @@
                             <textarea id="sms-message" placeholder="SMS 메시지 내용" rows="3"></textarea>
                         </div>
                         
-                        <button onclick="generateSMSQR()" class="btn-primary">QR코드 생성</button>
+                        <button id="generate-sms-btn" class="btn-primary">QR코드 생성</button>
                     </div>
                     
                     <div class="qr-result" id="qr-result-sms">
@@ -460,7 +460,7 @@
                             <input type="url" id="social-url" placeholder="https://www.instagram.com/username">
                         </div>
                         
-                        <button onclick="generateSocialQR()" class="btn-primary">QR코드 생성</button>
+                        <button id="generate-social-btn" class="btn-primary">QR코드 생성</button>
                     </div>
                     
                     <div class="qr-result" id="qr-result-social">
@@ -491,7 +491,7 @@
                             <input type="url" id="app-url" placeholder="https://apps.apple.com/app/... 또는 https://play.google.com/store/apps/...">
                         </div>
                         
-                        <button onclick="generateAppStoreQR()" class="btn-primary">QR코드 생성</button>
+                        <button id="generate-appstore-btn" class="btn-primary">QR코드 생성</button>
                     </div>
                     
                     <div class="qr-result" id="qr-result-appstore">
@@ -538,7 +538,7 @@
                             <input type="url" id="card-website" placeholder="https://www.company.com">
                         </div>
                         
-                        <button onclick="generateBusinessCardQR()" class="btn-primary">QR코드 생성</button>
+                        <button id="generate-business-card-btn" class="btn-primary">QR코드 생성</button>
                     </div>
                     
                     <div class="qr-result" id="qr-result-business-card">
@@ -575,7 +575,7 @@
                             <input type="number" id="location-lng" placeholder="126.9780" step="any">
                         </div>
                         
-                        <button onclick="generateLocationQR()" class="btn-primary">QR코드 생성</button>
+                        <button id="generate-location-btn" class="btn-primary">QR코드 생성</button>
                     </div>
                     
                     <div class="qr-result" id="qr-result-location">
@@ -612,7 +612,7 @@
                             <input type="number" id="bank-amount" placeholder="50000">
                         </div>
                         
-                        <button onclick="generateBankQR()" class="btn-primary">QR코드 생성</button>
+                        <button id="generate-bank-btn" class="btn-primary">QR코드 생성</button>
                     </div>
                     
                     <div class="qr-result" id="qr-result-bank">
@@ -649,7 +649,7 @@
                             <input type="number" id="payment-amount" placeholder="10000">
                         </div>
                         
-                        <button onclick="generatePaymentQR()" class="btn-primary">QR코드 생성</button>
+                        <button id="generate-payment-btn" class="btn-primary">QR코드 생성</button>
                     </div>
                     
                     <div class="qr-result" id="qr-result-payment">

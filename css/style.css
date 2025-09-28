@@ -576,11 +576,11 @@ body {
 
 /* ===== 도구 섹션 ===== */
 .tool-section {
-    display: none;
+    display: none !important;
 }
 
 .tool-section.active {
-    display: block;
+    display: block !important;
     animation: fadeIn 0.5s ease;
 }
 

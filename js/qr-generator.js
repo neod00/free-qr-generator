@@ -3,6 +3,16 @@
 // 전역 변수
 let currentQRCanvas = null;
 
+// QR코드 라이브러리 로딩 확인
+function checkQRLibrary() {
+    if (typeof QRCode === 'undefined') {
+        console.error('QRCode library not loaded');
+        showError('QR코드 라이브러리를 로드하는 중입니다. 잠시 후 다시 시도해주세요.');
+        return false;
+    }
+    return true;
+}
+
 // 텍스트 QR코드 생성
 function generateTextQR() {
     const text = document.getElementById('text-input').value;
@@ -302,6 +312,11 @@ function generatePaymentQR() {
 
 // QR코드 생성 공통 함수
 function generateQR(elementId, text, size = 300) {
+    // QR코드 라이브러리 로딩 확인
+    if (!checkQRLibrary()) {
+        return;
+    }
+    
     const element = document.getElementById(elementId);
     if (!element) {
         console.error(`Element with id '${elementId}' not found`);

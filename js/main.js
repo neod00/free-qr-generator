@@ -28,11 +28,11 @@ function initializeApp() {
 
 // ===== 도구 전환 함수 =====
 function showTool(toolId) {
-    // 이전 도구 숨기기
-    const previousTool = document.querySelector('.tool-section.active');
-    if (previousTool) {
-        previousTool.classList.remove('active');
-    }
+    // 모든 도구 섹션 숨기기
+    const allTools = document.querySelectorAll('.tool-section');
+    allTools.forEach(tool => {
+        tool.classList.remove('active');
+    });
     
     // 새로운 도구 표시
     const newTool = document.getElementById(toolId);
@@ -53,6 +53,8 @@ function showTool(toolId) {
         scrollToTop();
         
         console.log(`도구 전환: ${toolId}`);
+    } else {
+        console.error(`Tool with id '${toolId}' not found`);
     }
 }
 
@@ -112,21 +114,56 @@ function addSidebarEventListeners() {
 
 // ===== QR코드 생성 버튼 이벤트 리스너 추가 =====
 function addQRButtonEventListeners() {
-    // 텍스트 QR코드 생성 버튼
-    const textBtn = document.getElementById('generate-text-btn');
-    if (textBtn) {
-        textBtn.addEventListener('click', function() {
-            if (typeof generateTextQR === 'function') {
-                generateTextQR();
-            } else {
-                console.error('generateTextQR function not found');
-                showError('QR코드 생성 기능을 로드하는 중입니다. 잠시 후 다시 시도해주세요.');
+    // 모든 QR코드 생성 버튼에 이벤트 리스너 추가
+    const qrButtons = document.querySelectorAll('button[id*="generate"], button[onclick*="generate"]');
+    
+    qrButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // 버튼의 onclick 속성에서 함수명 추출
+            const onclickAttr = this.getAttribute('onclick');
+            if (onclickAttr) {
+                const functionName = onclickAttr.replace(/\(\)/, '');
+                if (typeof window[functionName] === 'function') {
+                    window[functionName]();
+                } else {
+                    console.error(`Function ${functionName} not found`);
+                    showError('QR코드 생성 기능을 로드하는 중입니다. 잠시 후 다시 시도해주세요.');
+                }
             }
         });
-    }
+    });
     
-    // 다른 QR코드 생성 버튼들도 추가할 수 있습니다
-    // URL, Wi-Fi, 연락처 등...
+    // 특정 버튼들에 대한 개별 처리
+    const buttonMappings = {
+        'generate-text-btn': 'generateTextQR',
+        'generate-url-btn': 'generateURLQR',
+        'generate-wifi-btn': 'generateWiFiQR',
+        'generate-contact-btn': 'generateContactQR',
+        'generate-email-btn': 'generateEmailQR',
+        'generate-sms-btn': 'generateSMSQR',
+        'generate-social-btn': 'generateSocialQR',
+        'generate-appstore-btn': 'generateAppStoreQR',
+        'generate-business-card-btn': 'generateBusinessCardQR',
+        'generate-location-btn': 'generateLocationQR',
+        'generate-bank-btn': 'generateBankQR',
+        'generate-payment-btn': 'generatePaymentQR'
+    };
+    
+    Object.entries(buttonMappings).forEach(([buttonId, functionName]) => {
+        const button = document.getElementById(buttonId);
+        if (button) {
+            button.addEventListener('click', function() {
+                if (typeof window[functionName] === 'function') {
+                    window[functionName]();
+                } else {
+                    console.error(`${functionName} function not found`);
+                    showError('QR코드 생성 기능을 로드하는 중입니다. 잠시 후 다시 시도해주세요.');
+                }
+            });
+        }
+    });
 }
 
 // ===== 결과 영역 초기화 =====
