@@ -444,64 +444,19 @@ function showSuccess(message) {
     }, 3000);
 }
 
-// 애니메이션 CSS 추가
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes slideIn {
-        from {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-        to {
-            transform: translateX(0);
-            opacity: 1;
-        }
-    }
-    
-    @keyframes slideOut {
-        from {
-            transform: translateX(0);
-            opacity: 1;
-        }
-        to {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-    }
-    
-    .qr-result {
-        display: none;
-        text-align: center;
-        margin-top: 2rem;
-        padding: 2rem;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 12px;
-        backdrop-filter: blur(10px);
-    }
-    
-    .qr-result.show {
-        display: block;
-        animation: fadeIn 0.5s ease;
-    }
-    
-    .qr-result canvas {
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-    
-    .qr-actions {
-        margin-top: 1rem;
-    }
-    
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-`;
-document.head.appendChild(style);
+// 애니메이션 CSS는 style.css에 포함됨
+
+// ===== 전역 함수로 노출 =====
+window.generateTextQR = generateTextQR;
+window.generateURLQR = generateURLQR;
+window.generateWiFiQR = generateWiFiQR;
+window.generateContactQR = generateContactQR;
+window.generateEmailQR = generateEmailQR;
+window.generateSMSQR = generateSMSQR;
+window.generateSocialQR = generateSocialQR;
+window.generateAppStoreQR = generateAppStoreQR;
+window.generateBusinessCardQR = generateBusinessCardQR;
+window.generateLocationQR = generateLocationQR;
+window.generateBankQR = generateBankQR;
+window.generatePaymentQR = generatePaymentQR;
+window.downloadQR = downloadQR;

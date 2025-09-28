@@ -544,3 +544,61 @@ body {
     background: rgba(102, 126, 234, 0.3);
     color: white;
 }
+
+/* ===== QR 결과 영역 ===== */
+.qr-result {
+    display: none;
+    text-align: center;
+    margin-top: 2rem;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.qr-result.show {
+    display: block;
+    animation: fadeIn 0.5s ease;
+}
+
+.qr-result canvas {
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    background: white;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.qr-actions {
+    margin-top: 1rem;
+}
+
+/* ===== 도구 섹션 ===== */
+.tool-section {
+    display: none;
+}
+
+.tool-section.active {
+    display: block;
+    animation: fadeIn 0.5s ease;
+}
+
+/* ===== 피처 카드 ===== */
+.feature-card {
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* ===== 사이드바 링크 ===== */
+.tool-list a.active {
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: white !important;
+    font-weight: 600;
+}

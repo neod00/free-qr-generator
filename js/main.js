@@ -277,68 +277,7 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
-// ===== 애니메이션 CSS 추가 =====
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes slideIn {
-        from {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-        to {
-            transform: translateX(0);
-            opacity: 1;
-        }
-    }
-    
-    @keyframes slideOut {
-        from {
-            transform: translateX(0);
-            opacity: 1;
-        }
-        to {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-    }
-    
-    .tool-section {
-        display: none;
-    }
-    
-    .tool-section.active {
-        display: block;
-        animation: fadeIn 0.5s ease;
-    }
-    
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    
-    .feature-card {
-        cursor: pointer;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    
-    .feature-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-    }
-    
-    .tool-list a.active {
-        background: rgba(255, 255, 255, 0.2) !important;
-        color: white !important;
-        font-weight: 600;
-    }
-`;
-document.head.appendChild(style);
+// ===== 애니메이션 CSS는 style.css에 포함됨 =====
 
 // ===== 페이지 로드 시간 측정 =====
 window.addEventListener('load', function() {
