@@ -47,7 +47,7 @@
             
             // QR코드 라이브러리 로딩 (다른 CDN 사용)
             var script = document.createElement('script');
-            script.src = 'https://unpkg.com/qrcode@1.5.3/build/qrcode.min.js';
+            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js';
             script.onload = function() {
                 // style 변수 복원
                 if (originalStyle !== undefined) {
@@ -58,10 +58,10 @@
                 console.log('QRCode library loaded successfully');
                 
                 // QRCode 객체가 제대로 로드되었는지 확인
-                if (typeof QRCode !== 'undefined') {
-                    console.log('QRCode object is available');
+                if (typeof qrcode !== 'undefined') {
+                    console.log('qrcode object is available');
                 } else {
-                    console.error('QRCode object is not available');
+                    console.error('qrcode object is not available');
                 }
             };
             script.onerror = function() {
