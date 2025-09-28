@@ -3,6 +3,17 @@
 // 전역 변수
 let currentQRCanvas = null;
 
+// 유틸리티 함수들
+function showError(message) {
+    console.error('QR Error:', message);
+    alert('오류: ' + message);
+}
+
+function showSuccess(message) {
+    console.log('QR Success:', message);
+    alert('성공: ' + message);
+}
+
 // QR코드 라이브러리 로딩 확인
 function checkQRLibrary() {
     if (typeof QRCode === 'undefined') {

@@ -6,24 +6,41 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeApp();
 });
 
+// ===== 유틸리티 함수들 =====
+function showError(message) {
+    console.error('Error:', message);
+    alert('오류: ' + message);
+}
+
+function showSuccess(message) {
+    console.log('Success:', message);
+    alert('성공: ' + message);
+}
+
 // ===== 앱 초기화 =====
 function initializeApp() {
-    // 홈 화면 표시
-    showTool('home');
+    console.log('앱 초기화 시작');
     
-    // 사이드바 링크 이벤트 리스너 추가
-    addSidebarEventListeners();
-    
-    // QR코드 생성 버튼 이벤트 리스너 추가
-    addQRButtonEventListeners();
-    
-    // 반응형 광고 크기 조정
-    adjustAdSizes();
-    
-    // 윈도우 리사이즈 이벤트
-    window.addEventListener('resize', adjustAdSizes);
-    
-    console.log('무료 온라인 QR생성기 앱이 초기화되었습니다.');
+    try {
+        // 홈 화면 표시
+        showTool('home');
+
+        // 사이드바 링크 이벤트 리스너 추가
+        addSidebarEventListeners();
+
+        // QR코드 생성 버튼 이벤트 리스너 추가
+        addQRButtonEventListeners();
+
+        // 반응형 광고 크기 조정
+        adjustAdSizes();
+
+        // 윈도우 리사이즈 이벤트
+        window.addEventListener('resize', adjustAdSizes);
+
+        console.log('무료 온라인 QR생성기 앱이 초기화되었습니다.');
+    } catch (error) {
+        console.error('앱 초기화 중 오류 발생:', error);
+    }
 }
 
 // ===== 도구 전환 함수 =====
