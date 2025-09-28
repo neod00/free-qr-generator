@@ -15,8 +15,13 @@ function checkQRLibrary() {
 
 // 텍스트 QR코드 생성
 function generateTextQR() {
+    console.log('generateTextQR 함수 호출됨');
+    
     const text = document.getElementById('text-input').value;
     const size = parseInt(document.getElementById('qr-size').value);
+    
+    console.log(`입력된 텍스트: ${text}`);
+    console.log(`QR코드 크기: ${size}`);
     
     if (!text.trim()) {
         showError('텍스트를 입력해주세요.');
@@ -312,8 +317,11 @@ function generatePaymentQR() {
 
 // QR코드 생성 공통 함수
 function generateQR(elementId, text, size = 300) {
+    console.log(`generateQR 호출됨 - elementId: ${elementId}, text: ${text}, size: ${size}`);
+    
     // QR코드 라이브러리 로딩 확인
     if (!checkQRLibrary()) {
+        console.error('QR코드 라이브러리 로딩 실패');
         return;
     }
     
@@ -323,10 +331,13 @@ function generateQR(elementId, text, size = 300) {
         return;
     }
     
+    console.log(`대상 요소 찾음: ${elementId}`);
+    
     // 기존 QR코드 제거
     element.innerHTML = '';
     
     try {
+        console.log('QR코드 생성 시작...');
         // QR코드 생성
         QRCode.toCanvas(element, text, {
             width: size,
@@ -344,15 +355,19 @@ function generateQR(elementId, text, size = 300) {
                 return;
             }
             
+            console.log('QR코드 생성 성공!');
+            
             // 성공 시 결과 영역 표시
             const resultElement = element.closest('.qr-result');
             if (resultElement) {
                 resultElement.classList.add('show');
                 resultElement.scrollIntoView({ behavior: 'smooth' });
+                console.log('결과 영역 표시됨');
             }
             
             // 현재 QR코드 캔버스 저장
             currentQRCanvas = element.querySelector('canvas');
+            console.log('QR코드 캔버스 저장됨');
             
             showSuccess('QR코드가 생성되었습니다!');
         });

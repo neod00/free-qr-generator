@@ -28,10 +28,15 @@ function initializeApp() {
 
 // ===== 도구 전환 함수 =====
 function showTool(toolId) {
+    console.log(`도구 전환 시도: ${toolId}`);
+    
     // 모든 도구 섹션 숨기기
-    const allTools = document.querySelectorAll('.tool-section');
+    const allTools = document.querySelectorAll('.tool-content .tool-section');
+    console.log(`발견된 도구 섹션 수: ${allTools.length}`);
+    
     allTools.forEach(tool => {
         tool.classList.remove('active');
+        console.log(`섹션 숨김: ${tool.id}`);
     });
     
     // 새로운 도구 표시
@@ -52,7 +57,13 @@ function showTool(toolId) {
         // 스크롤을 맨 위로
         scrollToTop();
         
-        console.log(`도구 전환: ${toolId}`);
+        console.log(`도구 전환 완료: ${toolId}`);
+        
+        // 전환 후 상태 확인
+        setTimeout(() => {
+            const activeTool = document.querySelector('.tool-content .tool-section.active');
+            console.log(`활성화된 도구: ${activeTool ? activeTool.id : '없음'}`);
+        }, 100);
     } else {
         console.error(`Tool with id '${toolId}' not found`);
     }
@@ -154,14 +165,19 @@ function addQRButtonEventListeners() {
     Object.entries(buttonMappings).forEach(([buttonId, functionName]) => {
         const button = document.getElementById(buttonId);
         if (button) {
+            console.log(`이벤트 리스너 등록: ${buttonId} -> ${functionName}`);
             button.addEventListener('click', function() {
+                console.log(`버튼 클릭됨: ${buttonId}`);
                 if (typeof window[functionName] === 'function') {
+                    console.log(`함수 호출: ${functionName}`);
                     window[functionName]();
                 } else {
                     console.error(`${functionName} function not found`);
                     showError('QR코드 생성 기능을 로드하는 중입니다. 잠시 후 다시 시도해주세요.');
                 }
             });
+        } else {
+            console.warn(`버튼을 찾을 수 없음: ${buttonId}`);
         }
     });
 }

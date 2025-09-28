@@ -575,13 +575,22 @@ body {
 }
 
 /* ===== 도구 섹션 ===== */
-.tool-section {
+.tool-content .tool-section {
     display: none !important;
 }
 
-.tool-section.active {
+.tool-content .tool-section.active {
     display: block !important;
     animation: fadeIn 0.5s ease;
+}
+
+/* 홈 섹션은 항상 표시 */
+.tool-content #home {
+    display: block !important;
+}
+
+.tool-content #home.active {
+    display: block !important;
 }
 
 /* ===== 피처 카드 ===== */
