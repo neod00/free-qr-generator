@@ -6,14 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM 로드 완료 - 앱 초기화 시작');
     
     // style 변수 충돌 방지 - 완전 제거
-    try {
-        if (typeof window.style !== 'undefined') {
-            console.log('style 변수 충돌 감지됨, 정리 중...');
-            delete window.style;
-        }
-    } catch (e) {
-        console.log('style 변수 정리 중 오류:', e);
-    }
+    // 모든 style 변수 관련 코드 제거
     
     // QR코드 라이브러리 로딩 대기 후 앱 초기화
     waitForQRCodeLibrary();
