@@ -25,22 +25,9 @@ function checkQRLibrary() {
     return true;
 }
 
-// QR코드 라이브러리 로딩 대기
-function waitForQRLibrary(callback, maxAttempts = 50) {
-    let attempts = 0;
-    const checkLibrary = () => {
-        attempts++;
-        if (typeof QRCode !== 'undefined') {
-            console.log('QRCode library loaded after', attempts, 'attempts');
-            callback();
-        } else if (attempts < maxAttempts) {
-            setTimeout(checkLibrary, 100);
-        } else {
-            console.error('QRCode library failed to load after', maxAttempts, 'attempts');
-            showError('QR코드 라이브러리 로딩에 실패했습니다. 페이지를 새로고침해주세요.');
-        }
-    };
-    checkLibrary();
+// QR코드 라이브러리 로딩 확인 (간소화)
+function isQRLibraryLoaded() {
+    return typeof QRCode !== 'undefined';
 }
 
 // 텍스트 QR코드 생성
@@ -350,8 +337,9 @@ function generateQR(elementId, text, size = 300) {
     console.log(`generateQR 호출됨 - elementId: ${elementId}, text: ${text}, size: ${size}`);
     
     // QR코드 라이브러리 로딩 확인
-    if (!checkQRLibrary()) {
-        console.error('QR코드 라이브러리 로딩 실패');
+    if (!isQRLibraryLoaded()) {
+        console.error('QR코드 라이브러리가 로드되지 않았습니다');
+        showError('QR코드 라이브러리를 로드하는 중입니다. 잠시 후 다시 시도해주세요.');
         return;
     }
     
@@ -381,7 +369,7 @@ function generateQR(elementId, text, size = 300) {
         }, function (error) {
             if (error) {
                 console.error('QR Code generation error:', error);
-                showError('QR코드 생성 중 오류가 발생했습니다.');
+                showError('QR코드 생성 중 오류가 발생했습니다: ' + error.message);
                 return;
             }
             
@@ -403,7 +391,7 @@ function generateQR(elementId, text, size = 300) {
         });
     } catch (error) {
         console.error('QR Code generation error:', error);
-        showError('QR코드 생성 중 오류가 발생했습니다.');
+        showError('QR코드 생성 중 오류가 발생했습니다: ' + error.message);
     }
 }
 

@@ -39,7 +39,22 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <!-- QR Code Library -->
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <script>
+        // style 변수 충돌 방지
+        (function() {
+            var originalStyle = window.style;
+            var script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js';
+            script.onload = function() {
+                window.style = originalStyle;
+                console.log('QRCode library loaded successfully');
+            };
+            script.onerror = function() {
+                console.error('QRCode library failed to load');
+            };
+            document.head.appendChild(script);
+        })();
+    </script>
     
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0000000000000000" crossorigin="anonymous"></script>
