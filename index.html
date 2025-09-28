@@ -39,7 +39,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <!-- QR Code Library -->
-    <script src="https://unpkg.com/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
     
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0000000000000000" crossorigin="anonymous"></script>
@@ -685,19 +685,14 @@
         // 기본 디버깅
         console.log('HTML 로드 완료');
         
-        // DOM 로드 확인
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('DOM 로드 완료');
+        // 오류 처리
+        window.addEventListener('error', function(e) {
+            console.error('JavaScript 오류:', e.error);
         });
         
         // 윈도우 로드 확인
         window.addEventListener('load', function() {
             console.log('윈도우 로드 완료');
-        });
-        
-        // 오류 처리
-        window.addEventListener('error', function(e) {
-            console.error('JavaScript 오류:', e.error);
         });
     </script>
     <script src="js/qr-generator.js" onerror="console.error('qr-generator.js 로딩 실패')"></script>

@@ -577,20 +577,28 @@ body {
 /* ===== 도구 섹션 ===== */
 .tool-content .tool-section {
     display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
 }
 
 .tool-content .tool-section.active {
     display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
     animation: fadeIn 0.5s ease;
 }
 
 /* 홈 섹션은 항상 표시 */
 .tool-content #home {
     display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
 }
 
 .tool-content #home.active {
     display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
 }
 
 /* ===== 피처 카드 ===== */

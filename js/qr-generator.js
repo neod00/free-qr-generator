@@ -21,7 +21,26 @@ function checkQRLibrary() {
         showError('QR코드 라이브러리를 로드하는 중입니다. 잠시 후 다시 시도해주세요.');
         return false;
     }
+    console.log('QRCode library loaded successfully');
     return true;
+}
+
+// QR코드 라이브러리 로딩 대기
+function waitForQRLibrary(callback, maxAttempts = 50) {
+    let attempts = 0;
+    const checkLibrary = () => {
+        attempts++;
+        if (typeof QRCode !== 'undefined') {
+            console.log('QRCode library loaded after', attempts, 'attempts');
+            callback();
+        } else if (attempts < maxAttempts) {
+            setTimeout(checkLibrary, 100);
+        } else {
+            console.error('QRCode library failed to load after', maxAttempts, 'attempts');
+            showError('QR코드 라이브러리 로딩에 실패했습니다. 페이지를 새로고침해주세요.');
+        }
+    };
+    checkLibrary();
 }
 
 // 텍스트 QR코드 생성

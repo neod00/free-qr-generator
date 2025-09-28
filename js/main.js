@@ -3,7 +3,26 @@ let currentTool = 'home';
 
 // ===== DOM 로드 완료 시 실행 =====
 document.addEventListener('DOMContentLoaded', function() {
-    initializeApp();
+    console.log('DOM 로드 완료 - 앱 초기화 시작');
+    
+    // QR코드 라이브러리 로딩 대기 후 앱 초기화
+    if (typeof waitForQRLibrary === 'function') {
+        waitForQRLibrary(function() {
+            initializeApp();
+        });
+    } else {
+        // waitForQRLibrary 함수가 아직 로드되지 않은 경우
+        setTimeout(function() {
+            if (typeof waitForQRLibrary === 'function') {
+                waitForQRLibrary(function() {
+                    initializeApp();
+                });
+            } else {
+                console.error('waitForQRLibrary function not found');
+                initializeApp();
+            }
+        }, 100);
+    }
 });
 
 // ===== 유틸리티 함수들 =====
