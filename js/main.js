@@ -5,10 +5,14 @@ let currentTool = 'home';
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM 로드 완료 - 앱 초기화 시작');
     
-    // style 변수 충돌 방지
-    if (typeof window.style !== 'undefined') {
-        console.log('style 변수 충돌 감지됨, 정리 중...');
-        delete window.style;
+    // style 변수 충돌 방지 - 완전 제거
+    try {
+        if (typeof window.style !== 'undefined') {
+            console.log('style 변수 충돌 감지됨, 정리 중...');
+            delete window.style;
+        }
+    } catch (e) {
+        console.log('style 변수 정리 중 오류:', e);
     }
     
     // QR코드 라이브러리 로딩 대기 후 앱 초기화
@@ -24,8 +28,8 @@ function waitForQRCodeLibrary() {
         attempts++;
         console.log(`QRCode 라이브러리 확인 시도 ${attempts}/${maxAttempts}`);
         
-        if (typeof QRCode !== 'undefined') {
-            console.log('QRCode 라이브러리 로드 완료!');
+        if (typeof QRCodeGenerator !== 'undefined') {
+            console.log('QRCodeGenerator 라이브러리 로드 완료!');
             initializeApp();
         } else if (attempts < maxAttempts) {
             setTimeout(checkLibrary, 100);

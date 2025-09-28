@@ -1,9 +1,13 @@
 // ===== QR코드 생성기 관련 함수들 =====
 
-// style 변수 충돌 방지
-if (typeof window.style !== 'undefined') {
-    console.log('QR Generator: style 변수 충돌 감지됨, 정리 중...');
-    delete window.style;
+// style 변수 충돌 방지 - 완전 제거
+try {
+    if (typeof window.style !== 'undefined') {
+        console.log('QR Generator: style 변수 충돌 감지됨, 정리 중...');
+        delete window.style;
+    }
+} catch (e) {
+    console.log('QR Generator: style 변수 정리 중 오류:', e);
 }
 
 // 전역 변수
