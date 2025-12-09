@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
-// import Script from 'next/script'; // Commenting out AdSense script for now to avoid accidental errors on local but keeping structure
+import Script from 'next/script';
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -48,16 +48,12 @@ export default function RootLayout({
 }) {
     return (
         <html lang="ko">
-            <head>
-                {/* AdSense Script - User to replace Publisher ID 
-        <Script
-          id="adsense-init"
-          strategy="afterInteractive"
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0000000000000000"
-          crossOrigin="anonymous"
-        />
-        */}
-            </head>
+            <Script
+                async
+                src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5907754718994620"
+                crossOrigin="anonymous"
+                strategy="afterInteractive"
+            />
             <body className={inter.className}>
                 <div className="min-h-screen flex flex-col bg-gray-50">
                     {children}
