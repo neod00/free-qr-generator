@@ -1,39 +1,97 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { QRCodeCanvas } from 'qrcode.react';
 import {
     Type, Link as LinkIcon, Wifi, Contact, Mail, MessageSquare,
-    Share2, Smartphone, CreditCard, MapPin, Landmark, DollarSign, Download
+    Smartphone, CreditCard, MapPin, Landmark, DollarSign, Download,
+    Calendar, Bitcoin, Phone, Share2, ArrowRight
 } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
 
-type QRType = 'text' | 'url' | 'wifi' | 'contact' | 'email' | 'sms' | 'social' | 'app' | 'card' | 'location' | 'bank' | 'payment';
-
-const menuItems = [
-    { id: 'text', label: '텍스트', icon: Type },
-    { id: 'url', label: 'URL', icon: LinkIcon },
-    { id: 'wifi', label: 'Wi-Fi', icon: Wifi },
-    { id: 'contact', label: '연락처', icon: Contact },
-    { id: 'email', label: '이메일', icon: Mail },
-    { id: 'sms', label: 'SMS', icon: MessageSquare },
-    { id: 'social', label: '소셜미디어', icon: Share2 },
-    { id: 'app', label: '앱스토어', icon: Smartphone },
-    { id: 'card', label: '명함', icon: CreditCard },
-    { id: 'location', label: '위치', icon: MapPin },
-    { id: 'bank', label: '계좌번호', icon: Landmark },
-    { id: 'payment', label: '결제', icon: DollarSign },
-];
+type QRType = 'text' | 'url' | 'wifi' | 'contact' | 'email' | 'sms' | 'whatsapp' | 'social' | 'event' | 'crypto' | 'location';
 
 export default function QRGenerator() {
-    const [activeTab, setActiveTab] = useState<QRType>('text');
-    const [inputValue, setInputValue] = useState('https://free-qr-generator.netlify.app/'); // Default value
+    const { t } = useLanguage();
+    const [activeTab, setActiveTab] = useState<QRType>('url');
+    const [inputValue, setInputValue] = useState('https://free-qr-generator.netlify.app/');
     const [size, setSize] = useState(300);
     const canvasRef = useRef<HTMLDivElement>(null);
+    const [formValues, setFormValues] = useState<any>({});
 
-    // Dynamic Input Handler
-    // For simplicity MVP, using a single consolidated input or specific forms based on tab.
-    // I will implement a few essential forms fully and generic for others to save token space in this turn, 
-    // but targeting the user's "success" requirement, I should try to be comprehensive.
+    const menuItems = [
+        { id: 'url', label: t.generator.tabs.url, icon: LinkIcon, color: 'text-blue-500' },
+        { id: 'wifi', label: t.generator.tabs.wifi, icon: Wifi, color: 'text-indigo-500' },
+        { id: 'contact', label: t.generator.tabs.contact, icon: Contact, color: 'text-violet-500' },
+        { id: 'text', label: t.generator.tabs.text, icon: Type, color: 'text-gray-500' },
+        { id: 'email', label: t.generator.tabs.email, icon: Mail, color: 'text-sky-500' },
+        { id: 'sms', label: t.generator.tabs.sms, icon: MessageSquare, color: 'text-green-500' },
+        { id: 'whatsapp', label: t.generator.tabs.whatsapp, icon: Phone, color: 'text-emerald-500' },
+        { id: 'social', label: t.generator.tabs.social, icon: Share2, color: 'text-pink-500' },
+        { id: 'event', label: t.generator.tabs.event, icon: Calendar, color: 'text-orange-500' },
+        { id: 'crypto', label: t.generator.tabs.crypto, icon: Bitcoin, color: 'text-yellow-500' },
+        { id: 'location', label: t.generator.tabs.location, icon: MapPin, color: 'text-red-500' },
+    ];
+
+    useEffect(() => {
+        setFormValues({});
+        setInputValue('');
+    }, [activeTab]);
+
+    useEffect(() => {
+        let newValue = '';
+        const v = formValues;
+
+        switch (activeTab) {
+            case 'url':
+            case 'text':
+                newValue = v.text || '';
+                break;
+            case 'wifi':
+                if (v.ssid) newValue = `WIFI:T:${v.encryption || 'WPA'};S:${v.ssid};P:${v.password || ''};H:${v.hidden ? 'true' : 'false'};;`;
+                break;
+            case 'contact':
+                if (v.name || v.phone) newValue = `BEGIN:VCARD\nVERSION:3.0\nN:${v.lastname || ''};${v.firstname || ''};;;\nFN:${v.firstname || ''} ${v.lastname || ''}\nORG:${v.org || ''}\nTITLE:${v.title || ''}\nTEL:${v.phone || ''}\nEMAIL:${v.email || ''}\nURL:${v.website || ''}\nADR:;;${v.street || ''};${v.city || ''};${v.state || ''};${v.zip || ''};${v.country || ''}\nEND:VCARD`;
+                break;
+            case 'email':
+                if (v.email) newValue = `mailto:${v.email}?subject=${encodeURIComponent(v.subject || '')}&body=${encodeURIComponent(v.body || '')}`;
+                break;
+            case 'sms':
+                if (v.phone) newValue = `smsto:${v.phone}:${v.message || ''}`;
+                break;
+            case 'whatsapp':
+                if (v.phone) newValue = `https://wa.me/${v.phone}?text=${encodeURIComponent(v.message || '')}`;
+                break;
+            case 'event':
+                if (v.title) newValue = `BEGIN:VEVENT\nSUMMARY:${v.title}\nDTSTART:${(v.start || '').replace(/[-:]/g, '')}\nDTEND:${(v.end || '').replace(/[-:]/g, '')}\nLOCATION:${v.location || ''}\nDESCRIPTION:${v.description || ''}\nEND:VEVENT`;
+                break;
+            case 'crypto':
+                if (v.address) newValue = `${v.type || 'bitcoin'}:${v.address}?amount=${v.amount || ''}&message=${encodeURIComponent(v.message || '')}`;
+                break;
+            case 'location':
+                if (v.lat && v.lng) newValue = `https://www.google.com/maps?q=${v.lat},${v.lng}`;
+                break;
+            case 'social':
+                if (v.username) {
+                    const platformUrl = {
+                        instagram: 'https://instagram.com/',
+                        facebook: 'https://facebook.com/',
+                        twitter: 'https://twitter.com/',
+                        youtube: 'https://youtube.com/@',
+                        tiktok: 'https://tiktok.com/@'
+                    }[v.platform as string] || '';
+                    newValue = platformUrl + v.username;
+                }
+                break;
+            default:
+                newValue = v.text || '';
+        }
+        setInputValue(newValue);
+    }, [formValues, activeTab]);
+
+    const handleInputChange = (field: string, value: any) => {
+        setFormValues((prev: any) => ({ ...prev, [field]: value }));
+    };
 
     const handleDownload = () => {
         const canvas = canvasRef.current?.querySelector('canvas');
@@ -41,163 +99,211 @@ export default function QRGenerator() {
             const url = canvas.toDataURL('image/png');
             const a = document.createElement('a');
             a.href = url;
-            a.download = `qr-code-${activeTab}.png`;
+            a.download = `qr-code-${activeTab}-${Date.now()}.png`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
         }
     };
 
+    // Component for reusable form fields
+    const Input = ({ ...props }) => (
+        <input className="block w-full rounded-lg border-gray-200 bg-gray-50 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all duration-200 p-3 text-sm" {...props} />
+    );
+    const TextArea = ({ ...props }) => (
+        <textarea className="block w-full rounded-lg border-gray-200 bg-gray-50 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all duration-200 p-3 text-sm" {...props} />
+    );
+    const Select = ({ children, ...props }: any) => (
+        <select className="block w-full rounded-lg border-gray-200 bg-gray-50 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all duration-200 p-3 text-sm" {...props}>{children}</select>
+    );
+    const Label = ({ children }: any) => (
+        <label className="block text-sm font-semibold text-gray-700 mb-1">{children}</label>
+    );
+
+
     const renderForm = () => {
         switch (activeTab) {
             case 'url':
                 return (
-                    <div className="space-y-4">
-                        <label className="block">
-                            <span className="text-gray-700">웹사이트 주소 (URL)</span>
-                            <input
-                                type="url"
-                                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 p-2 border"
-                                placeholder="https://example.com"
-                                value={inputValue}
-                                onChange={(e) => setInputValue(e.target.value)}
-                            />
-                        </label>
+                    <div className="space-y-4 animate-fadeIn">
+                        <div>
+                            <Label>{t.generator.forms.url_label}</Label>
+                            <Input type="url" placeholder="https://example.com" onChange={(e: any) => handleInputChange('text', e.target.value)} />
+                        </div>
                     </div>
                 );
             case 'text':
                 return (
-                    <div className="space-y-4">
-                        <label className="block">
-                            <span className="text-gray-700">변환할 텍스트</span>
-                            <textarea
-                                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 p-2 border"
-                                rows={4}
-                                placeholder="여기에 텍스트를 입력하세요..."
-                                value={inputValue}
-                                onChange={(e) => setInputValue(e.target.value)}
-                            />
-                        </label>
+                    <div className="space-y-4 animate-fadeIn">
+                        <div>
+                            <Label>{t.generator.forms.text_label}</Label>
+                            <TextArea rows={5} placeholder="..." onChange={(e: any) => handleInputChange('text', e.target.value)} />
+                        </div>
                     </div>
                 );
-            // ... Add other cases similarly, keeping simple for this iteration
-            // For 'wifi', 'contact' etc, we would normally construct a specialized string (e.g. "WIFI:S:MySSID;T:WPA;P:pass;;").
-            // To be safe and fast, I will map a few common ones and fallback to text for complex ones if needed, 
-            // OR implement a generic "helper" update.
-            default:
+            case 'wifi':
                 return (
-                    <div className="space-y-4">
-                        <label className="block">
-                            <span className="text-gray-700">데이터 입력</span>
-                            <input
-                                type="text"
-                                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 p-2 border"
-                                value={inputValue}
-                                onChange={(e) => setInputValue(e.target.value)}
-                            />
-                        </label>
-                        <p className="text-sm text-gray-500 mt-2">
-                            * 선택한 타입({activeTab})에 맞는 데이터를 입력하면 QR코드가 실시간으로 업데이트됩니다.
-                        </p>
+                    <div className="space-y-4 animate-fadeIn">
+                        <div><Label>{t.generator.forms.ssid}</Label><Input onChange={(e: any) => handleInputChange('ssid', e.target.value)} /></div>
+                        <div><Label>{t.generator.forms.password}</Label><Input type="password" onChange={(e: any) => handleInputChange('password', e.target.value)} /></div>
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <Label>{t.generator.forms.security}</Label>
+                                <Select onChange={(e: any) => handleInputChange('encryption', e.target.value)}>
+                                    <option value="WPA">WPA/WPA2</option>
+                                    <option value="WEP">WEP</option>
+                                    <option value="nopass">None</option>
+                                </Select>
+                            </div>
+                            <div className="flex items-center pt-6">
+                                <label className="flex items-center cursor-pointer">
+                                    <input type="checkbox" className="rounded border-gray-300 text-blue-600 shadow-sm w-4 h-4" onChange={(e) => handleInputChange('hidden', e.target.checked)} />
+                                    <span className="ml-2 text-sm text-gray-700">{t.generator.forms.hidden}</span>
+                                </label>
+                            </div>
+                        </div>
                     </div>
-                )
+                );
+            case 'contact':
+                return (
+                    <div className="space-y-4 animate-fadeIn">
+                        <div className="grid grid-cols-2 gap-4">
+                            <div><Label>{t.generator.forms.lastname}</Label><Input onChange={(e: any) => handleInputChange('lastname', e.target.value)} /></div>
+                            <div><Label>{t.generator.forms.firstname}</Label><Input onChange={(e: any) => handleInputChange('firstname', e.target.value)} /></div>
+                        </div>
+                        <div><Label>{t.generator.forms.phone}</Label><Input onChange={(e: any) => handleInputChange('phone', e.target.value)} /></div>
+                        <div><Label>{t.generator.forms.email}</Label><Input onChange={(e: any) => handleInputChange('email', e.target.value)} /></div>
+                        <div><Label>{t.generator.forms.org}</Label><Input onChange={(e: any) => handleInputChange('org', e.target.value)} /></div>
+                    </div>
+                );
+            case 'email':
+                return (
+                    <div className="space-y-4 animate-fadeIn">
+                        <div><Label>{t.generator.forms.email}</Label><Input placeholder="example@gmail.com" onChange={(e: any) => handleInputChange('email', e.target.value)} /></div>
+                        <div><Label>{t.generator.forms.subject}</Label><Input onChange={(e: any) => handleInputChange('subject', e.target.value)} /></div>
+                        <div><Label>{t.generator.forms.body}</Label><TextArea rows={4} onChange={(e: any) => handleInputChange('body', e.target.value)} /></div>
+                    </div>
+                );
+            // Fallbacks for others with translated labels
+            case 'sms': return <div className="space-y-4 animate-fadeIn"><div><Label>{t.generator.forms.phone}</Label><Input onChange={(e: any) => handleInputChange('phone', e.target.value)} /></div><div><Label>{t.generator.forms.message}</Label><TextArea rows={4} onChange={(e: any) => handleInputChange('message', e.target.value)} /></div></div>;
+            case 'whatsapp': return <div className="space-y-4 animate-fadeIn"><div><Label>WhatsApp Number</Label><Input placeholder="821012345678" onChange={(e: any) => handleInputChange('phone', e.target.value)} /></div><div><Label>{t.generator.forms.message}</Label><TextArea rows={4} onChange={(e: any) => handleInputChange('message', e.target.value)} /></div></div>;
+            case 'event': return <div className="space-y-4 animate-fadeIn"><div><Label>{t.generator.forms.subject}</Label><Input onChange={(e: any) => handleInputChange('title', e.target.value)} /></div><div className="grid grid-cols-2 gap-4"><div><Label>Start</Label><Input type="datetime-local" onChange={(e: any) => handleInputChange('start', e.target.value)} /></div><div><Label>End</Label><Input type="datetime-local" onChange={(e: any) => handleInputChange('end', e.target.value)} /></div></div><div><Label>Desc</Label><TextArea rows={3} onChange={(e: any) => handleInputChange('description', e.target.value)} /></div></div>;
+            case 'crypto': return <div className="space-y-4 animate-fadeIn"><div className="grid grid-cols-2 gap-4"><div><Label>Type</Label><Select onChange={(e: any) => handleInputChange('type', e.target.value)}><option value="bitcoin">Bitcoin</option><option value="ethereum">Ethereum</option></Select></div><div><Label>{t.generator.forms.amount}</Label><Input type="number" onChange={(e: any) => handleInputChange('amount', e.target.value)} /></div></div><div><Label>{t.generator.forms.address}</Label><Input onChange={(e: any) => handleInputChange('address', e.target.value)} /></div></div>;
+            case 'location': return <div className="space-y-4 animate-fadeIn"><div className="bg-blue-50 p-3 rounded text-sm text-blue-700 mb-2">Google Maps Coordinates</div><div className="grid grid-cols-2 gap-4"><div><Label>{t.generator.forms.lat}</Label><Input onChange={(e: any) => handleInputChange('lat', e.target.value)} /></div><div><Label>{t.generator.forms.lng}</Label><Input onChange={(e: any) => handleInputChange('lng', e.target.value)} /></div></div></div>;
+            case 'social': return <div className="space-y-4 animate-fadeIn"><div><Label>{t.generator.forms.platform}</Label><Select onChange={(e: any) => handleInputChange('platform', e.target.value)}><option value="">Select...</option><option value="instagram">Instagram</option><option value="youtube">YouTube</option><option value="facebook">Facebook</option><option value="tiktok">TikTok</option><option value="twitter">X (Twitter)</option></Select></div><div><Label>{t.generator.forms.username}</Label><div className="flex"><span className="inline-flex items-center px-4 rounded-l-lg border border-r-0 border-gray-200 bg-gray-50 text-gray-500">@</span><input className="block w-full rounded-r-lg border-gray-200 bg-gray-50 p-3 focus:ring-2 focus:ring-blue-100" onChange={(e: any) => handleInputChange('username', e.target.value)} /></div></div></div>;
+            default: return <div className="p-4 text-center text-gray-500">...</div>;
         }
     };
 
     return (
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col md:flex-row min-h-[600px]">
-            {/* Sidebar */}
-            <div className="w-full md:w-64 bg-gray-50 border-r border-gray-200 p-4 flex-shrink-0">
-                <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">QR 도구</h3>
-                <nav className="space-y-1">
-                    {menuItems.map((item) => (
-                        <button
-                            key={item.id}
-                            onClick={() => { setActiveTab(item.id as QRType); setInputValue(''); }}
-                            className={`w-full flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors ${activeTab === item.id
-                                    ? 'bg-blue-100 text-blue-700'
-                                    : 'text-gray-700 hover:bg-gray-100'
-                                }`}
-                        >
-                            <item.icon className="w-5 h-5 mr-3" aria-hidden="true" />
-                            {item.label}
-                        </button>
-                    ))}
-                </nav>
+        <div className="max-w-6xl mx-auto">
+            <div className="bg-white rounded-3xl shadow-xl shadow-slate-200/50 overflow-hidden border border-slate-100 flex flex-col lg:flex-row min-h-[650px]">
 
-                {/* Sidebar Ad Placeholder */}
-                <div className="mt-8 border border-gray-300 rounded bg-gray-100 h-[250px] flex items-center justify-center">
-                    <span className="text-xs text-gray-400">광고 (300x250)</span>
-                </div>
-            </div>
+                {/* Modern Sidebar / Tabs */}
+                <div className="w-full lg:w-72 bg-slate-50 border-b lg:border-b-0 lg:border-r border-slate-100 p-6 flex-shrink-0">
+                    <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-6 px-2">Select Tool</h3>
 
-            {/* Main Content */}
-            <div className="flex-1 p-8 flex flex-col">
-                <div className="mb-6">
-                    <h2 className="text-2xl font-bold text-gray-900 flex items-center">
-                        {menuItems.find(i => i.id === activeTab)?.label} QR코드 생성기
-                    </h2>
-                    <p className="text-gray-600 mt-1">
-                        원하는 정보를 입력하여 무료 QR코드를 생성하세요.
-                    </p>
+                    <nav className="flex lg:flex-col overflow-x-auto lg:overflow-visible space-x-2 lg:space-x-0 lg:space-y-1 pb-2 lg:pb-0 scrollbar-hide">
+                        {menuItems.map((item) => (
+                            <button
+                                key={item.id}
+                                onClick={() => setActiveTab(item.id as QRType)}
+                                className={`flex-shrink-0 flex items-center px-4 py-3 text-sm font-semibold rounded-xl transition-all duration-200 ${activeTab === item.id
+                                        ? 'bg-white text-slate-900 shadow-md scale-100 ring-1 ring-black/5'
+                                        : 'text-slate-500 hover:bg-slate-100 hover:text-slate-700'
+                                    }`}
+                            >
+                                <item.icon className={`w-5 h-5 mr-3 ${activeTab === item.id ? item.color : 'text-slate-400'}`} strokeWidth={activeTab === item.id ? 2.5 : 2} />
+                                {item.label}
+                            </button>
+                        ))}
+                    </nav>
+
+                    <div className="hidden lg:flex mt-auto pt-8 flex-col items-center justify-center">
+                        <div className="w-full aspect-square bg-slate-100 rounded-2xl border border-dashed border-slate-300 flex items-center justify-center">
+                            <span className="text-xs text-slate-400 font-medium tracking-wide">AD SPACE</span>
+                        </div>
+                    </div>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                    {/* Input Section */}
-                    <div>
-                        {renderForm()}
-
-                        <div className="mt-8">
-                            <label className="block mb-2 text-sm font-medium text-gray-700">QR코드 크기: {size}px</label>
-                            <input
-                                type="range"
-                                min="100"
-                                max="1000"
-                                value={size}
-                                onChange={(e) => setSize(Number(e.target.value))}
-                                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                            />
-                            <div className="flex justify-between text-xs text-gray-500 mt-1">
-                                <span>100px</span>
-                                <span>1000px</span>
-                            </div>
+                {/* Main Content Area */}
+                <div className="flex-1 p-6 md:p-10 lg:p-12 flex flex-col">
+                    <div className="mb-10 flex items-baseline justify-between border-b border-slate-100 pb-6">
+                        <div>
+                            <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-3">
+                                {menuItems.find(i => i.id === activeTab)?.label}
+                                <span className="text-sm font-medium text-slate-400 bg-slate-100 px-2 py-1 rounded-md">{t.generator.title}</span>
+                            </h2>
+                            <p className="text-slate-500 mt-2 text-sm">{t.generator.desc}</p>
                         </div>
                     </div>
 
-                    {/* Preview Section */}
-                    <div className="flex flex-col items-center justify-center bg-gray-50 p-8 rounded-xl border border-gray-200">
-                        <div className="bg-white p-4 rounded-lg shadow-sm" ref={canvasRef}>
-                            {inputValue ? (
-                                <QRCodeCanvas
-                                    value={inputValue}
-                                    size={size > 300 ? 300 : size} // Visual preview cap, real size uses logic or prop if library supports 
-                                    // Actually qrcode.react 'size' prop determines rendered size. 
-                                    // To support large download but small preview, we might need a hidden canvas or just let user download what they see.
-                                    // For MVP, just bind preview size to a reasonable max.
-                                    level={"H"}
-                                    includeMargin={true}
+                    <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 h-full">
+                        {/* Form Section */}
+                        <div className="flex-1 min-h-[300px]">
+                            {renderForm()}
+
+                            <div className="mt-10 pt-8 border-t border-dashed border-slate-200">
+                                <label className="flex justify-between text-sm font-semibold text-slate-700 mb-4">
+                                    <span>{t.generator.size}</span>
+                                    <span className="text-blue-600 font-mono">{size}px</span>
+                                </label>
+                                <input
+                                    type="range"
+                                    min="200"
+                                    max="1000"
+                                    step="100"
+                                    value={size}
+                                    onChange={(e) => setSize(Number(e.target.value))}
+                                    className="w-full h-3 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600 hover:accent-blue-700 transition-all"
                                 />
-                            ) : (
-                                <div className="w-[200px] h-[200px] bg-gray-200 flex items-center justify-center text-gray-400 text-center text-sm p-4">
-                                    데이터를 입력하면<br />QR코드가 나타납니다
-                                </div>
-                            )}
+                            </div>
                         </div>
 
-                        {inputValue && (
-                            <button
-                                onClick={handleDownload}
-                                className="mt-6 flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition shadow-lg"
-                            >
-                                <Download className="w-5 h-5 mr-2" />
-                                다운로드 (PNG)
-                            </button>
-                        )}
+                        {/* Preview Section - Sticky */}
+                        <div className="flex-shrink-0 w-full lg:w-80 flex flex-col items-center">
+                            <div className="sticky top-24 w-full">
+                                <div className="bg-white p-6 rounded-3xl shadow-xl shadow-blue-900/5 border border-slate-100 relative group overflow-hidden">
+                                    <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-indigo-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
-                        <p className="mt-4 text-xs text-gray-500 text-center">
-                            * 고해상도 PNG 파일로 저장됩니다.<br />
-                            * 모든 생성은 브라우저에서 안전하게 처리됩니다.
-                        </p>
+                                    <div className="relative z-10 bg-white rounded-2xl shadow-sm border border-slate-100 p-4 aspect-square flex items-center justify-center" ref={canvasRef}>
+                                        {inputValue ? (
+                                            <QRCodeCanvas
+                                                value={inputValue}
+                                                size={size > 240 ? 240 : size}
+                                                level={"H"}
+                                                includeMargin={true}
+                                                className="w-full h-full"
+                                            />
+                                        ) : (
+                                            <div className="flex flex-col items-center justify-center text-slate-300">
+                                                <div className="w-16 h-16 mb-4 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center">
+                                                    <Type className="w-8 h-8" />
+                                                </div>
+                                                <span className="text-sm font-medium">{t.generator.waiting}</span>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <div className="mt-6 flex flex-col gap-3 relative z-10">
+                                        <button
+                                            onClick={handleDownload}
+                                            disabled={!inputValue}
+                                            className={`w-full flex items-center justify-center px-6 py-4 rounded-xl font-bold shadow-lg transition-all transform duration-200 ${inputValue
+                                                    ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:shadow-blue-500/25 hover:-translate-y-1 active:scale-95'
+                                                    : 'bg-slate-100 text-slate-400 cursor-not-allowed'
+                                                }`}
+                                        >
+                                            <Download className="w-5 h-5 mr-2" />
+                                            {inputValue ? t.generator.download : t.generator.waiting}
+                                        </button>
+                                        <p className="text-center text-xs text-slate-400 font-medium">
+                                            High Quality • Vector Ready • Permanent
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
