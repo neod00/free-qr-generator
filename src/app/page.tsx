@@ -9,7 +9,7 @@ export default function Home() {
         name: '무료 온라인 QR생성기',
         alternateName: 'Free Online QR Generator',
         description: '무료 온라인 QR코드 생성기 - 텍스트, URL, Wi-Fi, 연락처, 이메일, SMS, 소셜미디어, 명함, 위치, 계좌번호, 결제 QR코드를 무료로 생성',
-        url: 'https://free-qr-generator.netlify.app/',
+        url: 'https://free-qrgenerator.netlify.app/',
         applicationCategory: 'UtilityApplication',
         operatingSystem: 'Any',
         offers: {
@@ -26,7 +26,7 @@ export default function Home() {
         publisher: {
             '@type': 'Organization',
             name: '무료 온라인 QR생성기',
-            url: 'https://free-qr-generator.netlify.app/'
+            url: 'https://free-qrgenerator.netlify.app/'
         }
     };
 

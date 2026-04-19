@@ -27,7 +27,7 @@ const menuItems = [
 ];
 
 export default function QRGenerator({ activeTab = 'text' }: { activeTab?: QRType }) {
-    const [inputValue, setInputValue] = useState('https://free-qr-generator.netlify.app/'); // Default value
+    const [inputValue, setInputValue] = useState('https://free-qrgenerator.netlify.app/'); // Default value
     const [size, setSize] = useState(300);
     const canvasRef = useRef<HTMLDivElement>(null);
 

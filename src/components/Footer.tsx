@@ -8,7 +8,7 @@ export default function Footer() {
                     <div className="mb-4 md:mb-0">
                         <p>&copy; {new Date().getFullYear()} 무료 온라인 QR생성기. 모든 권리 보유.</p>
                         <p className="text-sm text-gray-400 mt-2">
-                            문의사항: <a href="mailto:contact@free-qr-generator.com" className="hover:text-white transition">contact@free-qr-generator.com</a>
+                            문의사항: <a href="mailto:contact@free-qrgenerator.com" className="hover:text-white transition">contact@free-qrgenerator.com</a>
                         </p>
                     </div>
 
