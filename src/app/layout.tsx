@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
-// import Script from 'next/script'; // Commenting out AdSense script for now to avoid accidental errors on local but keeping structure
+import { LanguageProvider } from '@/context/LanguageContext';
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -59,9 +59,11 @@ export default function RootLayout({
         */}
             </head>
             <body className={inter.className}>
-                <div className="min-h-screen flex flex-col bg-gray-50">
-                    {children}
-                </div>
+                <LanguageProvider>
+                    <div className="min-h-screen flex flex-col bg-gray-50">
+                        {children}
+                    </div>
+                </LanguageProvider>
             </body>
         </html>
     );
