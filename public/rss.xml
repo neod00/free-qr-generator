@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>무료 온라인 QR생성기 - 최신 도구 및 가이드</title>
+    <link>https://free-qr-generator.netlify.app/</loc>
+    <description>무료 온라인 QR코드 생성기 - 텍스트, URL, Wi-Fi, 연락처 등 12가지 QR코드 생성 및 활용 가이드</description>
+    <language>ko</language>
+    <lastBuildDate>2024-12-10T00:00:00+09:00</lastBuildDate>
+    <item>
+      <title>URL 웹사이트 QR코드 생성 가이드</title>
+      <link>https://free-qr-generator.netlify.app/qr/url</link>
+      <description>웹사이트 주소를 QR코드로 변환하여 오프라인 고객의 온라인 유입을 극대화하는 방법을 알아보세요.</description>
+      <pubDate>2024-12-10T00:00:00+09:00</pubDate>
+      <guid isPermaLink="false">url-qr-guide</guid>
+    </item>
+    <item>
+      <title>와이파이(Wi-Fi) 비밀번호 공유를 위한 QR코드 활용법</title>
+      <link>https://free-qr-generator.netlify.app/qr/wifi</link>
+      <description>카페나 매장에서 비밀번호 타이핑 없이 스캔만으로 와이파이를 연결하는 방법과 보안 팁을 제공합니다.</description>
+      <pubDate>2024-12-10T00:00:00+09:00</pubDate>
+      <guid isPermaLink="false">wifi-qr-guide</guid>
+    </item>
+    <item>
+      <title>스마트한 인맥 관리를 위한 vCard 명함 QR코드 제작</title>
+      <link>https://free-qr-generator.netlify.app/qr/contact</link>
+      <description>종이 명함의 한계를 넘어 스캔 즉시 연락처에 저장되는 스마트 디지털 명함을 만드는 법을 소개합니다.</description>
+      <pubDate>2024-12-10T00:00:00+09:00</pubDate>
+      <guid isPermaLink="false">contact-qr-guide</guid>
+    </item>
+    <item>
+      <title>이메일 문의 접수를 자동화하는 Email QR코드</title>
+      <link>https://free-qr-generator.netlify.app/qr/email</link>
+      <description>고객의 문의 메일 제목과 본문을 미리 설정하여 스캔 한 번으로 접수받는 효율적인 마케팅 도구입니다.</description>
+      <pubDate>2024-12-10T00:00:00+09:00</pubDate>
+      <guid isPermaLink="false">email-qr-guide</guid>
+    </item>
+  </channel>
+</rss>
