@@ -1,4 +1,9 @@
 User-agent: *
 Allow: /
+Disallow: /_next/
+Disallow: /static/
 
+# 구글 봇을 위한 사이트맵 가이드
 Sitemap: https://free-qr-generator.netlify.app/sitemap.xml
+Sitemap: https://free-qr-generator.netlify.app/sites.xml
+Sitemap: https://free-qr-generator.netlify.app/rss.xml
