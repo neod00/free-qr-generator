@@ -7,6 +7,8 @@ import {
     Share2, Smartphone, CreditCard, MapPin, Landmark, DollarSign, Download
 } from 'lucide-react';
 
+import Link from 'next/link';
+
 type QRType = 'text' | 'url' | 'wifi' | 'contact' | 'email' | 'sms' | 'social' | 'app' | 'card' | 'location' | 'bank' | 'payment';
 
 const menuItems = [
@@ -24,17 +26,12 @@ const menuItems = [
     { id: 'payment', label: '결제', icon: DollarSign },
 ];
 
-export default function QRGenerator() {
-    const [activeTab, setActiveTab] = useState<QRType>('text');
+export default function QRGenerator({ activeTab = 'text' }: { activeTab?: QRType }) {
     const [inputValue, setInputValue] = useState('https://free-qr-generator.netlify.app/'); // Default value
     const [size, setSize] = useState(300);
     const canvasRef = useRef<HTMLDivElement>(null);
 
     // Dynamic Input Handler
-    // For simplicity MVP, using a single consolidated input or specific forms based on tab.
-    // I will implement a few essential forms fully and generic for others to save token space in this turn, 
-    // but targeting the user's "success" requirement, I should try to be comprehensive.
-
     const handleDownload = () => {
         const canvas = canvasRef.current?.querySelector('canvas');
         if (canvas) {
@@ -80,10 +77,6 @@ export default function QRGenerator() {
                         </label>
                     </div>
                 );
-            // ... Add other cases similarly, keeping simple for this iteration
-            // For 'wifi', 'contact' etc, we would normally construct a specialized string (e.g. "WIFI:S:MySSID;T:WPA;P:pass;;").
-            // To be safe and fast, I will map a few common ones and fallback to text for complex ones if needed, 
-            // OR implement a generic "helper" update.
             default:
                 return (
                     <div className="space-y-4">
@@ -111,9 +104,9 @@ export default function QRGenerator() {
                 <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">QR 도구</h3>
                 <nav className="space-y-1">
                     {menuItems.map((item) => (
-                        <button
+                        <Link
                             key={item.id}
-                            onClick={() => { setActiveTab(item.id as QRType); setInputValue(''); }}
+                            href={`/qr/${item.id}`}
                             className={`w-full flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors ${activeTab === item.id
                                     ? 'bg-blue-100 text-blue-700'
                                     : 'text-gray-700 hover:bg-gray-100'
@@ -121,7 +114,7 @@ export default function QRGenerator() {
                         >
                             <item.icon className="w-5 h-5 mr-3" aria-hidden="true" />
                             {item.label}
-                        </button>
+                        </Link>
                     ))}
                 </nav>
 
